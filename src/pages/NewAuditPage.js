@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAudit } from '../context/AuditContext';
 import { defaultChecklist } from '../data/demoData';
-import { Field } from './shared/ui';
+import { Field } from '../components/shared/ui';
 
 const wizardSteps = ['Organisation', 'Périmètre', 'Traitements', 'Checklist', 'Validation'];
 

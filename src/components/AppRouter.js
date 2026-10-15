@@ -1,14 +1,14 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAudit } from '../context/AuditContext';
-import { AuditWorkspacePage } from './AuditWorkspacePage';
-import { AuditsPage } from './AuditsPage';
-import { DashboardPage } from './DashboardPage';
-import { LoginPage } from './LoginPage';
-import { NewAuditPage } from './NewAuditPage';
-import { NotFoundPage } from './NotFoundPage';
-import { ProtectedLayout } from './ProtectedLayout';
-import { SettingsPage } from './SettingsPage';
+import { ProtectedLayout } from '../layout/ProtectedLayout';
+import { AuditWorkspacePage } from '../pages/AuditWorkspacePage';
+import { AuditsPage } from '../pages/AuditsPage';
+import { DashboardPage } from '../pages/DashboardPage';
+import { LoginPage } from '../pages/LoginPage';
+import { NewAuditPage } from '../pages/NewAuditPage';
+import { NotFoundPage } from '../pages/NotFoundPage';
+import { SettingsPage } from '../pages/SettingsPage';
 
 export function AppRouter() {
   const { isAuthenticated } = useAudit();

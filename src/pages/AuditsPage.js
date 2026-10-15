@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAudit } from '../context/AuditContext';
 import { calculateAuditProgress } from '../services/auditService';
-import { StatusBadge } from './shared/ui';
+import { StatusBadge } from '../components/shared/ui';
 
 export function AuditsPage() {
   const { audits, deleteAudit } = useAudit();

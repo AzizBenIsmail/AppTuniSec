@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAudit } from '../context/AuditContext';
 import { exportJsonFile, validateImportedData } from '../services/storageService';
-import { Field, SectionCard } from './shared/ui';
+import { Field, SectionCard } from '../components/shared/ui';
 
 export function SettingsPage() {
   const { settings, setSettings, audits, resetData, importData } = useAudit();

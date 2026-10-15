@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAudit } from '../context/AuditContext';
 import { calculateAuditProgress, calculateComplianceStats, generateReportSummary } from '../services/auditService';
-import { Field, SectionCard, StatusBadge, StatCard } from './shared/ui';
+import { Field, SectionCard, StatusBadge, StatCard } from '../components/shared/ui';
 import { NotFoundPage } from './NotFoundPage';
 
 const statusOptions = ['Conforme', 'Partiellement conforme', 'Non conforme', 'Non applicable', 'À vérifier'];

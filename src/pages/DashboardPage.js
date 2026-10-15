@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useAudit } from '../context/AuditContext';
 import { calculateComplianceStats } from '../services/auditService';
-import { SectionCard, StatCard, StatusBadge } from './shared/ui';
+import { SectionCard, StatCard, StatusBadge } from '../components/shared/ui';
 
 export function DashboardPage() {
   const { audits } = useAudit();
