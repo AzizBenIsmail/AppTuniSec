@@ -211,6 +211,65 @@ h2 {
   margin-top: 20px;
 }
 
+.info-panel {
+  margin-top: 20px;
+}
+
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.guide-step {
+  display: flex;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.02);
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--primary), var(--teal));
+  color: white;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.guide-step strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.guide-step p,
+.simple-list {
+  color: var(--text-soft);
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+.simple-list {
+  padding-left: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.info-banner {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(60, 141, 255, 0.25);
+  background: rgba(60, 141, 255, 0.08);
+  color: #dfeeff;
+  line-height: 1.6;
+}
+
 .panel-surface,
 .section-card,
 .wizard {
@@ -830,7 +889,14 @@ h2 {
     grid-template-columns: 1fr;
   }
 
-  .wizard-steps {
+  .wizard-steps,
+  .guide-grid {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .guide-grid {
+    grid-template-columns: 1fr;
   }
 }

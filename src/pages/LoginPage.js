@@ -24,12 +24,12 @@ export function LoginPage() {
               </div>
             </div>
 
-            <span className="login-badge">Plateforme de démonstration</span>
+            <span className="login-badge">Pour les PME tunisiennes</span>
 
             <h1>TuniSec</h1>
             <p className="login-subtitle">
-              Contrôlez la conformité des traitements de données en Tunisie avec un cadre de travail
-              structuré, clair et prêt à démonstration.
+              Simplifiez votre audit de conformité à la protection des données personnelles avec un parcours
+              guidé, pensé pour les entreprises sans équipe juridique dédiée.
             </p>
 
             <div className="login-metrics">
@@ -63,13 +63,15 @@ export function LoginPage() {
           </div>
 
           <p>
-            TuniSec aide les auditeurs, consultants et responsables conformité à piloter un audit basé sur
-            la loi n° 2004-63, sans mettre en œuvre de backend ni d’authentification réelle.
+            TuniSec aide les PME tunisiennes à structurer leur analyse de conformité, à prioriser leurs
+            actions et à préparer un audit simple, exploitable et compréhensible par l’ensemble de
+            l’entreprise. Ce démonstrateur ne remplace ni un avis juridique ni une conformité réglementaire
+            formelle.
           </p>
 
           <div className="login-note">
             <strong>Mode démonstration</strong>
-            <span>Cette application simule un accès sans authentification réelle.</span>
+            <span>Un parcours guidé pour tester les étapes clés sans utiliser de données réelles.</span>
           </div>
 
           <button className="button button-primary login-button" onClick={handleDemoAccess}>

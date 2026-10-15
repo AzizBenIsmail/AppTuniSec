@@ -48,6 +48,32 @@ export function DashboardPage() {
         Créer un audit
       </button>
 
+      <SectionCard title="Parcours guidé pour une PME" className="panel-surface info-panel">
+        <div className="guide-grid">
+          <div className="guide-step">
+            <span className="step-number">1</span>
+            <div>
+              <strong>Identifier</strong>
+              <p>Qui collecte des données clientes, fournisseurs, salariés ou fichiers internes ?</p>
+            </div>
+          </div>
+          <div className="guide-step">
+            <span className="step-number">2</span>
+            <div>
+              <strong>Évaluer</strong>
+              <p>Quels risques existent pour la confidentialité, la sécurité et les droits des personnes ?</p>
+            </div>
+          </div>
+          <div className="guide-step">
+            <span className="step-number">3</span>
+            <div>
+              <strong>Agir</strong>
+              <p>Fixez 3 actions prioritaires simples et mesurables pour améliorer votre posture.</p>
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+
       <div className="stats-grid">
         <StatCard label="Projets d’audit" value={stats.totalProjects} accent="blue" />
         <StatCard label="Audits en cours" value={stats.auditsInProgress} accent="teal" />
@@ -99,6 +125,16 @@ export function DashboardPage() {
             <button className="button button-primary" onClick={() => window.location.assign('/audits/new')}>Nouveau projet</button>
             <button className="button button-secondary" onClick={() => window.location.assign('/audits')}>Ouvrir un audit</button>
           </div>
+        </SectionCard>
+      </div>
+
+      <div className="simple-tips">
+        <SectionCard title="Priorités recommandées pour une PME" className="panel-surface">
+          <ul className="simple-list">
+            <li>Identifier les fichiers sensibles, les messageries et les outils de gestion utilisés par l’entreprise.</li>
+            <li>Limiter l’accès aux données et documenter qui peut les consulter ou les modifier.</li>
+            <li>Mettre en place un plan d’action simple, priorisé et suivi chaque trimestre.</li>
+          </ul>
         </SectionCard>
       </div>
     </div>

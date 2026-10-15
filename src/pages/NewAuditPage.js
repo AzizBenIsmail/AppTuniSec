@@ -13,7 +13,7 @@ export function NewAuditPage() {
   const [form, setForm] = useState({
     title: '',
     organizationName: '',
-    sector: 'Finance',
+    sector: 'Commerce',
     scope: '',
     objectives: '',
     lead: '',
@@ -89,10 +89,10 @@ export function NewAuditPage() {
       risks: [],
       actions: [],
       report: {
-        executiveSummary: 'Audit initial créé via le wizard. Les constatations seront complétées dans l’espace de travail.',
-        methodology: 'Analyse documentaire, contrôle de la conformité et synthèse de risques.',
-        limitations: 'Le présent rapport constitue une base de travail, sans équivaloir à une validation juridique formelle.',
-        conclusion: 'Des mesures d’ajustement doivent être validées avant conclusions définitives.'
+        executiveSummary: 'Ce rapport donne une vue synthétique des points à surveiller pour une PME. Il aide à prioriser les actions sans remplacer un avis juridique spécialisé.',
+        methodology: 'Analyse documentaire, évaluation pratique des traitements de données et priorisation des actions correctives.',
+        limitations: 'Le présent rapport constitue une base de travail utile à la gestion et au pilotage interne. Il ne se substitue pas à un conseil juridique formel.',
+        conclusion: 'Les priorités de correction doivent être validées par la direction et suivies dans le cadre d’un plan d’action concret.'
       }
     };
 
@@ -120,65 +120,83 @@ export function NewAuditPage() {
 
         <div className="wizard-body">
           {currentStep === 'Organisation' && (
-            <div className="form-grid">
-              <Field label="Titre de l’audit" error={errors.title}>
-                <input value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} />
-              </Field>
-              <Field label="Organisation" error={errors.organizationName}>
-                <input value={form.organizationName} onChange={(event) => setForm({ ...form, organizationName: event.target.value })} />
-              </Field>
-              <Field label="Secteur">
-                <select value={form.sector} onChange={(event) => setForm({ ...form, sector: event.target.value })}>
-                  <option value="Finance">Finance</option>
-                  <option value="Santé">Santé</option>
-                  <option value="Commerce">Commerce</option>
-                  <option value="Public">Public</option>
-                  <option value="Technologie">Technologie</option>
-                  <option value="Autre">Autre</option>
-                </select>
-              </Field>
-              <Field label="Responsable / lead" error={errors.lead}>
-                <input value={form.lead} onChange={(event) => setForm({ ...form, lead: event.target.value })} />
-              </Field>
-            </div>
+            <>
+              <div className="info-banner">
+                Répondez simplement : quelle est votre activité, qui pilote la démarche et quel est le besoin principal ?
+              </div>
+              <div className="form-grid">
+                <Field label="Titre de l’audit" error={errors.title}>
+                  <input value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} />
+                </Field>
+                <Field label="Organisation" error={errors.organizationName}>
+                  <input value={form.organizationName} onChange={(event) => setForm({ ...form, organizationName: event.target.value })} />
+                </Field>
+                <Field label="Secteur">
+                  <select value={form.sector} onChange={(event) => setForm({ ...form, sector: event.target.value })}>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Services">Services</option>
+                    <option value="Industrie">Industrie</option>
+                    <option value="Tourisme">Tourisme</option>
+                    <option value="Agriculture">Agriculture</option>
+                    <option value="Santé">Santé</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Technologie">Technologie</option>
+                    <option value="Autre">Autre</option>
+                  </select>
+                </Field>
+                <Field label="Responsable / lead" error={errors.lead}>
+                  <input value={form.lead} onChange={(event) => setForm({ ...form, lead: event.target.value })} />
+                </Field>
+              </div>
+            </>
           )}
 
           {currentStep === 'Périmètre' && (
-            <div className="form-grid">
-              <Field label="Périmètre d’audit" error={errors.scope}>
-                <textarea value={form.scope} onChange={(event) => setForm({ ...form, scope: event.target.value })} rows={5} />
-              </Field>
-              <Field label="Objectifs" error={errors.objectives}>
-                <textarea value={form.objectives} onChange={(event) => setForm({ ...form, objectives: event.target.value })} rows={5} />
-              </Field>
-              <Field label="Date de début">
-                <input type="date" value={form.startDate} onChange={(event) => setForm({ ...form, startDate: event.target.value })} />
-              </Field>
-              <Field label="Date cible">
-                <input type="date" value={form.targetDate} onChange={(event) => setForm({ ...form, targetDate: event.target.value })} />
-              </Field>
-            </div>
+            <>
+              <div className="info-banner">
+                Exemple : clients, fournisseurs, salariés, cartes bancaires, historique de commandes, documents internes.
+              </div>
+              <div className="form-grid">
+                <Field label="Périmètre d’audit" error={errors.scope}>
+                  <textarea value={form.scope} onChange={(event) => setForm({ ...form, scope: event.target.value })} rows={5} />
+                </Field>
+                <Field label="Objectifs" error={errors.objectives}>
+                  <textarea value={form.objectives} onChange={(event) => setForm({ ...form, objectives: event.target.value })} rows={5} />
+                </Field>
+                <Field label="Date de début">
+                  <input type="date" value={form.startDate} onChange={(event) => setForm({ ...form, startDate: event.target.value })} />
+                </Field>
+                <Field label="Date cible">
+                  <input type="date" value={form.targetDate} onChange={(event) => setForm({ ...form, targetDate: event.target.value })} />
+                </Field>
+              </div>
+            </>
           )}
 
           {currentStep === 'Traitements' && (
-            <div className="form-grid">
-              <Field label="Activités de traitement" error={errors.processingActivities}>
-                <textarea value={form.processingActivities} onChange={(event) => setForm({ ...form, processingActivities: event.target.value })} rows={5} />
-              </Field>
-              <Field label="Focus checklist">
-                <input value={form.checklistFocus} onChange={(event) => setForm({ ...form, checklistFocus: event.target.value })} />
-              </Field>
-              <Field label="Statut initial">
-                <select value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value })}>
-                  <option value="Planifié">Planifié</option>
-                  <option value="En cours">En cours</option>
-                  <option value="À revoir">À revoir</option>
-                </select>
-              </Field>
-              <Field label="Notes">
-                <textarea value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} rows={4} />
-              </Field>
-            </div>
+            <>
+              <div className="info-banner">
+                Décrivez simplement les traitements clés ; vous n’avez pas besoin d’un vocabulaire juridique pour commencer.
+              </div>
+              <div className="form-grid">
+                <Field label="Activités de traitement" error={errors.processingActivities}>
+                  <textarea value={form.processingActivities} onChange={(event) => setForm({ ...form, processingActivities: event.target.value })} rows={5} />
+                </Field>
+                <Field label="Focus checklist">
+                  <input value={form.checklistFocus} onChange={(event) => setForm({ ...form, checklistFocus: event.target.value })} />
+                </Field>
+                <Field label="Statut initial">
+                  <select value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value })}>
+                    <option value="Planifié">Planifié</option>
+                    <option value="En cours">En cours</option>
+                    <option value="À revoir">À revoir</option>
+                  </select>
+                </Field>
+                <Field label="Notes">
+                  <textarea value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} rows={4} />
+                </Field>
+              </div>
+            </>
           )}
 
           {currentStep === 'Checklist' && (
