@@ -27,6 +27,24 @@ export function AuditProvider({ children }) {
     loginDemo: () => setIsAuthenticated(true),
     logoutDemo: () => setIsAuthenticated(false),
     setSettings: (nextSettings) => setState((previous) => ({ ...previous, settings: nextSettings })),
+    startOnboarding: () => setState((previous) => ({
+      ...previous,
+      settings: {
+        ...(previous.settings || {}),
+        onboardingStep: 0,
+        onboardingOpen: true,
+        onboardingCompleted: false
+      }
+    })),
+    closeOnboarding: () => setState((previous) => ({
+      ...previous,
+      settings: {
+        ...(previous.settings || {}),
+        onboardingStep: previous.settings?.onboardingStep ?? 0,
+        onboardingOpen: false,
+        onboardingCompleted: true
+      }
+    })),
     createAudit: (newAudit) => {
       setState((previous) => ({
         ...previous,
