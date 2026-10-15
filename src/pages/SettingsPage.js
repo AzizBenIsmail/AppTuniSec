@@ -4,7 +4,7 @@ import { exportJsonFile, validateImportedData } from '../services/storageService
 import { Field, SectionCard } from '../components/shared/ui';
 
 export function SettingsPage() {
-  const { settings, setSettings, audits, resetData, importData } = useAudit();
+  const { settings, setSettings, audits, resetData, importData, startOnboarding } = useAudit();
   const [profile, setProfile] = useState(settings?.profile || { name: '', role: '', organization: '' });
   const [importMessage, setImportMessage] = useState('');
 
@@ -67,6 +67,7 @@ export function SettingsPage() {
             </Field>
           </div>
           <button className="button button-primary" onClick={() => setSettings({ ...settings, profile })}>Enregistrer</button>
+          <button className="button button-secondary" onClick={startOnboarding}>Relancer le guide</button>
         </SectionCard>
 
         <SectionCard title="Données et sécurité" className="panel-surface">

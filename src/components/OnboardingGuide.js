@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAudit } from '../context/AuditContext';
 
 const steps = [
@@ -95,6 +95,12 @@ const steps = [
 export function OnboardingGuide() {
   const { settings, setSettings } = useAudit();
   const [currentStep, setCurrentStep] = useState(settings?.onboardingStep || 0);
+
+  useEffect(() => {
+    if (typeof settings?.onboardingStep === 'number') {
+      setCurrentStep(settings.onboardingStep);
+    }
+  }, [settings?.onboardingStep]);
 
   const step = steps[currentStep];
 
