@@ -1,12 +1,20 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAudit } from '../context/AuditContext';
 
 export function Sidebar() {
+  const { settings, setSettings } = useAudit();
+  const theme = settings?.theme || 'dark';
   const navItems = [
     { label: 'Tableau de bord', path: '/dashboard' },
     { label: 'Audits', path: '/audits' },
     { label: 'Paramètres', path: '/settings' }
   ];
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setSettings({ ...settings, theme: nextTheme });
+  };
 
   return (
     <aside className="sidebar">
@@ -29,6 +37,16 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
+
+      <button
+        type="button"
+        className="theme-toggle"
+        onClick={toggleTheme}
+        aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+      >
+        <span aria-hidden="true">{theme === 'dark' ? '☀️' : '🌙'}</span>
+        {theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
+      </button>
 
       <div className="sidebar-card">
         <span className="eyebrow">Demo</span>
