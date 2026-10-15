@@ -4,13 +4,15 @@ import { useAudit } from '../context/AuditContext';
 import { calculateAuditProgress, calculateComplianceStats, generateReportSummary } from '../services/auditService';
 import { Field, SectionCard, StatusBadge, StatCard } from '../components/shared/ui';
 import { NotFoundPage } from './NotFoundPage';
+import { getDateLocale, translate as t } from '../i18n';
 
 const statusOptions = ['Conforme', 'Partiellement conforme', 'Non conforme', 'Non applicable', 'À vérifier'];
 const riskOptions = ['Faible', 'Moyen', 'Élevé', 'Critique'];
 
 export function AuditWorkspacePage() {
   const { auditId } = useParams();
-  const { audits, updateChecklistItem, updateAudit, addEvidence, addFinding, addAction } = useAudit();
+  const { audits, updateChecklistItem, updateAudit, addEvidence, addFinding, addAction, settings } = useAudit();
+  const language = settings?.language || 'fr';
   const audit = audits.find((item) => item.id === auditId);
   const [activeTab, setActiveTab] = useState('overview');
   const [evidenceForm, setEvidenceForm] = useState({ title: '', description: '', category: 'Documentation', date: new Date().toISOString().slice(0, 10), itemId: 'A01', documentRef: '', notes: '' });
@@ -109,7 +111,7 @@ export function AuditWorkspacePage() {
     <div className="page-header">
       <div className="page-toolbar">
         <div>
-          <span className="eyebrow">Espace d’audit</span>
+          <span className="eyebrow">{t('Espace d’audit', language)}</span>
           <h1>{audit.title}</h1>
         </div>
         <StatusBadge status={audit.status} />
@@ -122,39 +124,39 @@ export function AuditWorkspacePage() {
             className={`tab-button ${activeTab === tab ? 'active' : ''}`}
             onClick={() => setActiveTab(tab)}
           >
-            {tab === 'overview' && 'Vue d’ensemble'}
-            {tab === 'checklist' && 'Checklist'}
-            {tab === 'evidence' && 'Preuves'}
-            {tab === 'findings' && 'Constatations'}
-            {tab === 'risk' && 'Risques'}
-            {tab === 'actions' && 'Actions'}
-            {tab === 'report' && 'Rapport'}
+            {tab === 'overview' && t('Vue d’ensemble', language)}
+            {tab === 'checklist' && t('Checklist', language)}
+            {tab === 'evidence' && t('Preuves', language)}
+            {tab === 'findings' && t('Constatations', language)}
+            {tab === 'risk' && t('Risques', language)}
+            {tab === 'actions' && t('Actions', language)}
+            {tab === 'report' && t('Rapport', language)}
           </button>
         ))}
       </div>
 
       {activeTab === 'overview' && (
         <div className="two-column-layout">
-          <SectionCard title="Vue d’ensemble" className="panel-surface">
+          <SectionCard title={t('Vue d’ensemble', language)} className="panel-surface">
             <div className="detail-grid">
               <dl>
-                <dt>Organisation</dt>
+                <dt>{t('Organisation', language)}</dt>
                 <dd>{audit.organizationName}</dd>
-                <dt>Secteur</dt>
+                <dt>{t('Secteur', language)}</dt>
                 <dd>{audit.sector}</dd>
                 <dt>Lead</dt>
                 <dd>{audit.lead}</dd>
-                <dt>Échéance</dt>
-                <dd>{new Date(audit.targetDate).toLocaleDateString('fr-FR')}</dd>
+                <dt>{t('Échéance', language)}</dt>
+                <dd>{new Date(audit.targetDate).toLocaleDateString(getDateLocale(language))}</dd>
               </dl>
             </div>
             <p>{audit.notes}</p>
           </SectionCard>
 
-          <SectionCard title="Progression" className="panel-surface">
+          <SectionCard title={t('Progression', language)} className="panel-surface">
             <div className="progress-row">
               <div className="progress-labels">
-                <span>État du contrôle</span>
+                <span>{t('État du contrôle', language)}</span>
                 <strong>{progress.percent}%</strong>
               </div>
               <div className="progress-track">
@@ -162,17 +164,17 @@ export function AuditWorkspacePage() {
               </div>
             </div>
             <div className="mini-stat-grid">
-              <StatCard label="Contrôles" value={progress.total} accent="blue" compact />
-              <StatCard label="Conformes" value={complianceStats['Conforme']} accent="green" compact />
-              <StatCard label="À vérifier" value={complianceStats['À vérifier']} accent="yellow" compact />
-              <StatCard label="Non conformes" value={complianceStats['Non conforme']} accent="red" compact />
+              <StatCard label={t('Contrôles', language)} value={progress.total} accent="blue" compact />
+              <StatCard label={t('Conformes', language)} value={complianceStats['Conforme']} accent="green" compact />
+              <StatCard label={t('À vérifier', language)} value={complianceStats['À vérifier']} accent="yellow" compact />
+              <StatCard label={t('Non conformes', language)} value={complianceStats['Non conforme']} accent="red" compact />
             </div>
           </SectionCard>
         </div>
       )}
 
       {activeTab === 'checklist' && (
-        <SectionCard title="Checklist de conformité" className="panel-surface">
+        <SectionCard title={t('Checklist de conformité', language)} className="panel-surface">
           <div className="checklist-list">
             {audit.checklist.map((item) => (
               <div key={item.id} className="checklist-line">
@@ -188,11 +190,11 @@ export function AuditWorkspacePage() {
                     onChange={(event) => updateChecklistItem(audit.id, item.id, event.target.value)}
                   >
                     {statusOptions.map((status) => (
-                      <option key={status} value={status}>{status}</option>
+                      <option key={status} value={status}>{t(status, language)}</option>
                     ))}
                   </select>
                 </div>
-                <div className="checklist-comments"><strong>Commentaire :</strong> {item.comments || '—'}</div>
+                <div className="checklist-comments"><strong>{t('Commentaire :', language)}</strong> {item.comments || '—'}</div>
               </div>
             ))}
           </div>
@@ -201,38 +203,38 @@ export function AuditWorkspacePage() {
 
       {activeTab === 'evidence' && (
         <div className="two-column-layout">
-          <SectionCard title="Ajouter une preuve" className="panel-surface">
+          <SectionCard title={t('Ajouter une preuve', language)} className="panel-surface">
             <form className="stacked-form" onSubmit={handleEvidenceSubmit}>
-              <Field label="Titre"><input value={evidenceForm.title} onChange={(event) => setEvidenceForm({ ...evidenceForm, title: event.target.value })} /></Field>
-              <Field label="Description"><textarea value={evidenceForm.description} onChange={(event) => setEvidenceForm({ ...evidenceForm, description: event.target.value })} rows={3} /></Field>
-              <Field label="Catégorie">
+              <Field label={t('Titre', language)}><input value={evidenceForm.title} onChange={(event) => setEvidenceForm({ ...evidenceForm, title: event.target.value })} /></Field>
+              <Field label={t('Description', language)}><textarea value={evidenceForm.description} onChange={(event) => setEvidenceForm({ ...evidenceForm, description: event.target.value })} rows={3} /></Field>
+              <Field label={t('Catégorie', language)}>
                 <select value={evidenceForm.category} onChange={(event) => setEvidenceForm({ ...evidenceForm, category: event.target.value })}>
-                  <option value="Documentation">Documentation</option>
-                  <option value="Droits des personnes">Droits des personnes</option>
-                  <option value="Sécurité">Sécurité</option>
-                  <option value="Contrat">Contrat</option>
+                  <option value="Documentation">{t('Documentation', language)}</option>
+                  <option value="Droits des personnes">{t('Droits des personnes', language)}</option>
+                  <option value="Sécurité">{t('Sécurité', language)}</option>
+                  <option value="Contrat">{t('Contrat', language)}</option>
                 </select>
               </Field>
-              <Field label="Date"><input type="date" value={evidenceForm.date} onChange={(event) => setEvidenceForm({ ...evidenceForm, date: event.target.value })} /></Field>
-              <Field label="Référence de document"><input value={evidenceForm.documentRef} onChange={(event) => setEvidenceForm({ ...evidenceForm, documentRef: event.target.value })} /></Field>
-              <Field label="Notes"><textarea value={evidenceForm.notes} onChange={(event) => setEvidenceForm({ ...evidenceForm, notes: event.target.value })} rows={3} /></Field>
-              <button className="button button-primary" type="submit">Enregistrer la preuve</button>
+              <Field label={t('Date', language)}><input type="date" value={evidenceForm.date} onChange={(event) => setEvidenceForm({ ...evidenceForm, date: event.target.value })} /></Field>
+              <Field label={t('Référence de document', language)}><input value={evidenceForm.documentRef} onChange={(event) => setEvidenceForm({ ...evidenceForm, documentRef: event.target.value })} /></Field>
+              <Field label={t('Notes', language)}><textarea value={evidenceForm.notes} onChange={(event) => setEvidenceForm({ ...evidenceForm, notes: event.target.value })} rows={3} /></Field>
+              <button className="button button-primary" type="submit">{t('Enregistrer la preuve', language)}</button>
             </form>
           </SectionCard>
 
-          <SectionCard title="Preuves documentées" className="panel-surface">
+          <SectionCard title={t('Preuves documentées', language)} className="panel-surface">
             {audit.evidence?.length ? (
               <ul className="list-items">
                 {audit.evidence.map((item) => (
                   <li key={item.id} className="list-item">
                     <strong>{item.title}</strong>
-                    <span>{item.category}</span>
-                    <small>{item.documentRef || 'Sans référence'}</small>
+                    <span>{t(item.category, language)}</span>
+                    <small>{item.documentRef || t('Sans référence', language)}</small>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="muted-text">Aucune preuve enregistrée pour le moment.</p>
+              <p className="muted-text">{t('Aucune preuve enregistrée pour le moment.', language)}</p>
             )}
           </SectionCard>
         </div>
@@ -240,37 +242,37 @@ export function AuditWorkspacePage() {
 
       {activeTab === 'findings' && (
         <div className="two-column-layout">
-          <SectionCard title="Nouvelle constatation" className="panel-surface">
+          <SectionCard title={t('Nouvelle constatation', language)} className="panel-surface">
             <form className="stacked-form" onSubmit={handleFindingSubmit}>
-              <Field label="Titre"><input value={findingForm.title} onChange={(event) => setFindingForm({ ...findingForm, title: event.target.value })} /></Field>
-              <Field label="Description"><textarea value={findingForm.description} onChange={(event) => setFindingForm({ ...findingForm, description: event.target.value })} rows={3} /></Field>
-              <Field label="Référence légale"><input value={findingForm.legalReference} onChange={(event) => setFindingForm({ ...findingForm, legalReference: event.target.value })} /></Field>
-              <Field label="Niveau de risque">
+              <Field label={t('Titre', language)}><input value={findingForm.title} onChange={(event) => setFindingForm({ ...findingForm, title: event.target.value })} /></Field>
+              <Field label={t('Description', language)}><textarea value={findingForm.description} onChange={(event) => setFindingForm({ ...findingForm, description: event.target.value })} rows={3} /></Field>
+              <Field label={t('Référence légale', language)}><input value={findingForm.legalReference} onChange={(event) => setFindingForm({ ...findingForm, legalReference: event.target.value })} /></Field>
+              <Field label={t('Niveau de risque', language)}>
                 <select value={findingForm.riskLevel} onChange={(event) => setFindingForm({ ...findingForm, riskLevel: event.target.value })}>
                   {riskOptions.map((option) => (
-                    <option key={option} value={option}>{option}</option>
+                    <option key={option} value={option}>{t(option, language)}</option>
                   ))}
                 </select>
               </Field>
-              <Field label="Responsable"><input value={findingForm.responsible} onChange={(event) => setFindingForm({ ...findingForm, responsible: event.target.value })} /></Field>
-              <Field label="Date cible"><input type="date" value={findingForm.targetDate} onChange={(event) => setFindingForm({ ...findingForm, targetDate: event.target.value })} /></Field>
-              <button className="button button-primary" type="submit">Créer le constat</button>
+              <Field label={t('Responsable', language)}><input value={findingForm.responsible} onChange={(event) => setFindingForm({ ...findingForm, responsible: event.target.value })} /></Field>
+              <Field label={t('Date cible', language)}><input type="date" value={findingForm.targetDate} onChange={(event) => setFindingForm({ ...findingForm, targetDate: event.target.value })} /></Field>
+              <button className="button button-primary" type="submit">{t('Créer le constat', language)}</button>
             </form>
           </SectionCard>
 
-          <SectionCard title="Constatations" className="panel-surface">
+          <SectionCard title={t('Constatations', language)} className="panel-surface">
             {audit.findings?.length ? (
               <ul className="list-items">
                 {audit.findings.map((item) => (
                   <li key={item.id} className="list-item">
                     <strong>{item.title}</strong>
-                    <span>{item.riskLevel}</span>
+                    <span>{t(item.riskLevel, language)}</span>
                     <small>{item.responsible}</small>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="muted-text">Aucune constatation enregistrée.</p>
+              <p className="muted-text">{t('Aucune constatation enregistrée.', language)}</p>
             )}
           </SectionCard>
         </div>
@@ -278,28 +280,28 @@ export function AuditWorkspacePage() {
 
       {activeTab === 'risk' && (
         <div className="two-column-layout">
-          <SectionCard title="Évaluation des risques" className="panel-surface">
+          <SectionCard title={t('Évaluation des risques', language)} className="panel-surface">
             <form className="stacked-form" onSubmit={handleRiskSubmit}>
-              <Field label="Catégorie"><input value={riskForm.category} onChange={(event) => setRiskForm({ ...riskForm, category: event.target.value })} /></Field>
-              <Field label="Probabilité"><input type="number" min="1" max="5" value={riskForm.likelihood} onChange={(event) => setRiskForm({ ...riskForm, likelihood: Number(event.target.value) })} /></Field>
-              <Field label="Impact"><input type="number" min="1" max="5" value={riskForm.impact} onChange={(event) => setRiskForm({ ...riskForm, impact: Number(event.target.value) })} /></Field>
-              <button className="button button-primary" type="submit">Calculer le risque</button>
+              <Field label={t('Catégorie', language)}><input value={riskForm.category} onChange={(event) => setRiskForm({ ...riskForm, category: event.target.value })} /></Field>
+              <Field label={t('Probabilité', language)}><input type="number" min="1" max="5" value={riskForm.likelihood} onChange={(event) => setRiskForm({ ...riskForm, likelihood: Number(event.target.value) })} /></Field>
+              <Field label={t('Impact', language)}><input type="number" min="1" max="5" value={riskForm.impact} onChange={(event) => setRiskForm({ ...riskForm, impact: Number(event.target.value) })} /></Field>
+              <button className="button button-primary" type="submit">{t('Calculer le risque', language)}</button>
             </form>
           </SectionCard>
 
-          <SectionCard title="Historique des évaluations" className="panel-surface">
+          <SectionCard title={t('Historique des évaluations', language)} className="panel-surface">
             {audit.risks?.length ? (
               <ul className="list-items">
                 {audit.risks.map((risk) => (
                   <li key={risk.id} className="list-item">
                     <strong>{risk.category}</strong>
-                    <span>Score {risk.score}</span>
-                    <small>{risk.level}</small>
+                    <span>{t('Score', language)} {risk.score}</span>
+                    <small>{t(risk.level, language)}</small>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="muted-text">Aucune évaluation de risque enregistrée.</p>
+              <p className="muted-text">{t('Aucune évaluation de risque enregistrée.', language)}</p>
             )}
           </SectionCard>
         </div>
@@ -307,55 +309,55 @@ export function AuditWorkspacePage() {
 
       {activeTab === 'actions' && (
         <div className="two-column-layout">
-          <SectionCard title="Nouvelle action corrective" className="panel-surface">
+          <SectionCard title={t('Nouvelle action corrective', language)} className="panel-surface">
             <form className="stacked-form" onSubmit={handleActionSubmit}>
-              <Field label="Action"><input value={actionForm.title} onChange={(event) => setActionForm({ ...actionForm, title: event.target.value })} /></Field>
-              <Field label="Description"><textarea value={actionForm.description} onChange={(event) => setActionForm({ ...actionForm, description: event.target.value })} rows={3} /></Field>
-              <Field label="Constat associé"><input value={actionForm.linkedFinding} onChange={(event) => setActionForm({ ...actionForm, linkedFinding: event.target.value })} /></Field>
-              <Field label="Responsable"><input value={actionForm.responsible} onChange={(event) => setActionForm({ ...actionForm, responsible: event.target.value })} /></Field>
-              <Field label="Priorité"><select value={actionForm.priority} onChange={(event) => setActionForm({ ...actionForm, priority: event.target.value })}><option>Élevée</option><option>Moyenne</option><option>Faible</option></select></Field>
-              <Field label="Date butoire"><input type="date" value={actionForm.deadline} onChange={(event) => setActionForm({ ...actionForm, deadline: event.target.value })} /></Field>
+              <Field label={t('Action', language)}><input value={actionForm.title} onChange={(event) => setActionForm({ ...actionForm, title: event.target.value })} /></Field>
+              <Field label={t('Description', language)}><textarea value={actionForm.description} onChange={(event) => setActionForm({ ...actionForm, description: event.target.value })} rows={3} /></Field>
+              <Field label={t('Constat associé', language)}><input value={actionForm.linkedFinding} onChange={(event) => setActionForm({ ...actionForm, linkedFinding: event.target.value })} /></Field>
+              <Field label={t('Responsable', language)}><input value={actionForm.responsible} onChange={(event) => setActionForm({ ...actionForm, responsible: event.target.value })} /></Field>
+              <Field label={t('Priorité', language)}><select value={actionForm.priority} onChange={(event) => setActionForm({ ...actionForm, priority: event.target.value })}><option value="Élevée">{t('Élevée', language)}</option><option value="Moyenne">{t('Moyenne', language)}</option><option value="Faible">{t('Faible', language)}</option></select></Field>
+              <Field label={t('Date butoire', language)}><input type="date" value={actionForm.deadline} onChange={(event) => setActionForm({ ...actionForm, deadline: event.target.value })} /></Field>
               <Field label="Progression (%)"><input type="number" min="0" max="100" value={actionForm.progress} onChange={(event) => setActionForm({ ...actionForm, progress: Number(event.target.value) })} /></Field>
-              <button className="button button-primary" type="submit">Ajouter l’action</button>
+              <button className="button button-primary" type="submit">{t('Ajouter l’action', language)}</button>
             </form>
           </SectionCard>
 
-          <SectionCard title="Plan d’actions" className="panel-surface">
+          <SectionCard title={t('Plan d’actions', language)} className="panel-surface">
             {audit.actions?.length ? (
               <ul className="list-items">
                 {audit.actions.map((item) => (
                   <li key={item.id} className="list-item">
                     <strong>{item.title}</strong>
-                    <span>{item.status}</span>
+                    <span>{t(item.status, language)}</span>
                     <small>{item.responsible}</small>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="muted-text">Aucune action corrective enregistrée.</p>
+              <p className="muted-text">{t('Aucune action corrective enregistrée.', language)}</p>
             )}
           </SectionCard>
         </div>
       )}
 
       {activeTab === 'report' && (
-        <SectionCard title="Aperçu du rapport" className="panel-surface report-preview">
+        <SectionCard title={t('Aperçu du rapport', language)} className="panel-surface report-preview">
           <div className="report-header">
             <div>
-              <span className="eyebrow">Rapport d’audit</span>
+              <span className="eyebrow">{t('Rapport d’audit', language)}</span>
               <h2>{audit.organizationName}</h2>
             </div>
             <button className="button button-secondary" onClick={() => window.print()}>
-              Imprimer / PDF
+              {t('Imprimer / PDF', language)}
             </button>
           </div>
 
-          <p><strong>Résumé exécutif :</strong> {audit.report?.executiveSummary}</p>
-          <p><strong>Méthodologie :</strong> {audit.report?.methodology}</p>
-          <p><strong>Limites :</strong> {audit.report?.limitations}</p>
-          <p><strong>Conclusion :</strong> {audit.report?.conclusion}</p>
+          <p><strong>{t('Résumé exécutif :', language)}</strong> {audit.report?.executiveSummary}</p>
+          <p><strong>{t('Méthodologie :', language)}</strong> {audit.report?.methodology}</p>
+          <p><strong>{t('Limites :', language)}</strong> {audit.report?.limitations}</p>
+          <p><strong>{t('Conclusion :', language)}</strong> {audit.report?.conclusion}</p>
           <div className="report-summary-box">
-            <strong>Résumé généré :</strong>
+            <strong>{t('Résumé généré :', language)}</strong>
             <span>{reportSummary}</span>
           </div>
         </SectionCard>

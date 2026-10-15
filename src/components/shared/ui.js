@@ -1,4 +1,6 @@
 import React from 'react';
+import { useAudit } from '../../context/AuditContext';
+import { translate as t } from '../../i18n';
 
 export function SectionCard({ title, children, className }) {
   return (
@@ -19,8 +21,13 @@ export function StatCard({ label, value, accent, compact = false }) {
 }
 
 export function StatusBadge({ status }) {
+  const { settings } = useAudit();
   const normalized = status || 'Planifié';
-  return <span className={`status-badge status-${normalized.toLowerCase().replace(/\s+/g, '-')}`}>{normalized}</span>;
+  return (
+    <span className={`status-badge status-${normalized.toLowerCase().replace(/\s+/g, '-')}`}>
+      {t(normalized, settings?.language || 'fr')}
+    </span>
+  );
 }
 
 export function Field({ label, error, children }) {

@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAudit } from '../context/AuditContext';
 import { defaultChecklist } from '../data/demoData';
 import { Field } from '../components/shared/ui';
+import { translate as t } from '../i18n';
 
 const wizardSteps = ['Organisation', 'Périmètre', 'Traitements', 'Checklist', 'Validation'];
 
 export function NewAuditPage() {
   const navigate = useNavigate();
-  const { createAudit } = useAudit();
+  const { createAudit, settings } = useAudit();
+  const language = settings?.language || 'fr';
   const [stepIndex, setStepIndex] = useState(0);
   const [form, setForm] = useState({
     title: '',
@@ -30,17 +32,17 @@ export function NewAuditPage() {
     const currentErrors = {};
 
     if (stepIndex === 0) {
-      if (!form.organizationName.trim()) currentErrors.organizationName = 'Renseignez le nom de l’organisation.';
-      if (!form.lead.trim()) currentErrors.lead = 'Indiquez le responsable de l’audit.';
+      if (!form.organizationName.trim()) currentErrors.organizationName = t('Renseignez le nom de l’organisation.', language);
+      if (!form.lead.trim()) currentErrors.lead = t('Indiquez le responsable de l’audit.', language);
     }
 
     if (stepIndex === 1) {
-      if (!form.scope.trim()) currentErrors.scope = 'Le périmètre est requis.';
-      if (!form.objectives.trim()) currentErrors.objectives = 'Les objectifs sont requis.';
+      if (!form.scope.trim()) currentErrors.scope = t('Le périmètre est requis.', language);
+      if (!form.objectives.trim()) currentErrors.objectives = t('Les objectifs sont requis.', language);
     }
 
     if (stepIndex === 2 && !form.processingActivities.trim()) {
-      currentErrors.processingActivities = 'Décrivez les traitements de données concernés.';
+      currentErrors.processingActivities = t('Décrivez les traitements de données concernés.', language);
     }
 
     if (Object.keys(currentErrors).length) {
@@ -57,10 +59,10 @@ export function NewAuditPage() {
   const handleSubmit = () => {
     const validation = {};
 
-    if (!form.title.trim()) validation.title = 'Le titre est requis.';
-    if (!form.organizationName.trim()) validation.organizationName = 'L’organisation est requise.';
-    if (!form.scope.trim()) validation.scope = 'Le périmètre est requis.';
-    if (!form.objectives.trim()) validation.objectives = 'Les objectifs sont requis.';
+    if (!form.title.trim()) validation.title = t('Le titre est requis.', language);
+    if (!form.organizationName.trim()) validation.organizationName = t('L’organisation est requise.', language);
+    if (!form.scope.trim()) validation.scope = t('Le périmètre est requis.', language);
+    if (!form.objectives.trim()) validation.objectives = t('Les objectifs sont requis.', language);
 
     if (Object.keys(validation).length) {
       setErrors(validation);
@@ -105,15 +107,15 @@ export function NewAuditPage() {
   return (
     <div className="page-header">
       <div>
-        <span className="eyebrow">Nouveau projet</span>
-        <h1>Assistant de création</h1>
+        <span className="eyebrow">{t('Nouveau projet', language)}</span>
+        <h1>{t('Assistant de création', language)}</h1>
       </div>
 
       <div className="wizard panel-surface">
         <div className="wizard-steps">
           {wizardSteps.map((step, index) => (
             <div key={step} className={`wizard-step ${index === stepIndex ? 'active' : ''}`}>
-              {index + 1}. {step}
+              {index + 1}. {t(step, language)}
             </div>
           ))}
         </div>
@@ -122,29 +124,23 @@ export function NewAuditPage() {
           {currentStep === 'Organisation' && (
             <>
               <div className="info-banner">
-                Répondez simplement : quelle est votre activité, qui pilote la démarche et quel est le besoin principal ?
+                {t('Répondez simplement : quelle est votre activité, qui pilote la démarche et quel est le besoin principal ?', language)}
               </div>
               <div className="form-grid">
-                <Field label="Titre de l’audit" error={errors.title}>
+                <Field label={t('Titre de l’audit', language)} error={errors.title}>
                   <input value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} />
                 </Field>
-                <Field label="Organisation" error={errors.organizationName}>
+                <Field label={t('Organisation', language)} error={errors.organizationName}>
                   <input value={form.organizationName} onChange={(event) => setForm({ ...form, organizationName: event.target.value })} />
                 </Field>
-                <Field label="Secteur">
+                <Field label={t('Secteur', language)}>
                   <select value={form.sector} onChange={(event) => setForm({ ...form, sector: event.target.value })}>
-                    <option value="Commerce">Commerce</option>
-                    <option value="Services">Services</option>
-                    <option value="Industrie">Industrie</option>
-                    <option value="Tourisme">Tourisme</option>
-                    <option value="Agriculture">Agriculture</option>
-                    <option value="Santé">Santé</option>
-                    <option value="Finance">Finance</option>
-                    <option value="Technologie">Technologie</option>
-                    <option value="Autre">Autre</option>
+                    {['Commerce', 'Services', 'Industrie', 'Tourisme', 'Agriculture', 'Santé', 'Finance', 'Technologie', 'Autre'].map((sector) => (
+                      <option key={sector} value={sector}>{t(sector, language)}</option>
+                    ))}
                   </select>
                 </Field>
-                <Field label="Responsable / lead" error={errors.lead}>
+                <Field label={t('Responsable / lead', language)} error={errors.lead}>
                   <input value={form.lead} onChange={(event) => setForm({ ...form, lead: event.target.value })} />
                 </Field>
               </div>
@@ -154,19 +150,19 @@ export function NewAuditPage() {
           {currentStep === 'Périmètre' && (
             <>
               <div className="info-banner">
-                Exemple : clients, fournisseurs, salariés, cartes bancaires, historique de commandes, documents internes.
+                {t('Exemple : clients, fournisseurs, salariés, cartes bancaires, historique de commandes, documents internes.', language)}
               </div>
               <div className="form-grid">
-                <Field label="Périmètre d’audit" error={errors.scope}>
+                <Field label={t('Périmètre d’audit', language)} error={errors.scope}>
                   <textarea value={form.scope} onChange={(event) => setForm({ ...form, scope: event.target.value })} rows={5} />
                 </Field>
-                <Field label="Objectifs" error={errors.objectives}>
+                <Field label={t('Objectifs', language)} error={errors.objectives}>
                   <textarea value={form.objectives} onChange={(event) => setForm({ ...form, objectives: event.target.value })} rows={5} />
                 </Field>
-                <Field label="Date de début">
+                <Field label={t('Date de début', language)}>
                   <input type="date" value={form.startDate} onChange={(event) => setForm({ ...form, startDate: event.target.value })} />
                 </Field>
-                <Field label="Date cible">
+                <Field label={t('Date cible', language)}>
                   <input type="date" value={form.targetDate} onChange={(event) => setForm({ ...form, targetDate: event.target.value })} />
                 </Field>
               </div>
@@ -176,23 +172,23 @@ export function NewAuditPage() {
           {currentStep === 'Traitements' && (
             <>
               <div className="info-banner">
-                Décrivez simplement les traitements clés ; vous n’avez pas besoin d’un vocabulaire juridique pour commencer.
+                {t('Décrivez simplement les traitements clés ; vous n’avez pas besoin d’un vocabulaire juridique pour commencer.', language)}
               </div>
               <div className="form-grid">
-                <Field label="Activités de traitement" error={errors.processingActivities}>
+                <Field label={t('Activités de traitement', language)} error={errors.processingActivities}>
                   <textarea value={form.processingActivities} onChange={(event) => setForm({ ...form, processingActivities: event.target.value })} rows={5} />
                 </Field>
-                <Field label="Focus checklist">
+                <Field label={t('Focus checklist', language)}>
                   <input value={form.checklistFocus} onChange={(event) => setForm({ ...form, checklistFocus: event.target.value })} />
                 </Field>
-                <Field label="Statut initial">
+                <Field label={t('Statut initial', language)}>
                   <select value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value })}>
-                    <option value="Planifié">Planifié</option>
-                    <option value="En cours">En cours</option>
-                    <option value="À revoir">À revoir</option>
+                    <option value="Planifié">{t('Planifié', language)}</option>
+                    <option value="En cours">{t('En cours', language)}</option>
+                    <option value="À revoir">{t('À revoir', language)}</option>
                   </select>
                 </Field>
-                <Field label="Notes">
+                <Field label={t('Notes', language)}>
                   <textarea value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} rows={4} />
                 </Field>
               </div>
@@ -205,7 +201,7 @@ export function NewAuditPage() {
                 <div key={item.id} className="checklist-item-preview">
                   <span className="item-id">{item.id}</span>
                   <div>
-                    <strong>{item.category}</strong>
+                    <strong>{t(item.category, language)}</strong>
                     <p>{item.question}</p>
                   </div>
                 </div>
@@ -215,13 +211,13 @@ export function NewAuditPage() {
 
           {currentStep === 'Validation' && (
             <div className="review-panel">
-              <h3>Récapitulatif</h3>
+              <h3>{t('Récapitulatif', language)}</h3>
               <ul>
-                <li><strong>Organisation :</strong> {form.organizationName}</li>
+                <li><strong>{t('Organisation', language)} :</strong> {form.organizationName}</li>
                 <li><strong>Lead :</strong> {form.lead}</li>
-                <li><strong>Début :</strong> {form.startDate}</li>
-                <li><strong>Objectifs :</strong> {form.objectives}</li>
-                <li><strong>Traitements :</strong> {form.processingActivities}</li>
+                <li><strong>{t('Début', language)} :</strong> {form.startDate}</li>
+                <li><strong>{t('Objectifs', language)} :</strong> {form.objectives}</li>
+                <li><strong>{t('Traitements', language)} :</strong> {form.processingActivities}</li>
               </ul>
             </div>
           )}
@@ -229,15 +225,15 @@ export function NewAuditPage() {
 
         <div className="wizard-actions">
           <button className="button button-secondary" onClick={previousStep} disabled={stepIndex === 0}>
-            Précédent
+            {t('Précédent', language)}
           </button>
           {stepIndex < wizardSteps.length - 1 ? (
             <button className="button button-primary" onClick={nextStep}>
-              Suivant
+              {t('Suivant', language)}
             </button>
           ) : (
             <button className="button button-primary" onClick={handleSubmit}>
-              Créer l’audit
+              {t('Créer l’audit', language)}
             </button>
           )}
         </div>

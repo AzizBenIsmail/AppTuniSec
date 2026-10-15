@@ -1,10 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAudit } from '../context/AuditContext';
+import { translate as t } from '../i18n';
 
 export function LoginPage() {
-  const { loginDemo } = useAudit();
+  const { loginDemo, settings, setSettings } = useAudit();
   const navigate = useNavigate();
+  const language = settings?.language || 'fr';
 
   const handleDemoAccess = () => {
     loginDemo();
@@ -13,6 +15,18 @@ export function LoginPage() {
 
   return (
     <div className="login-page">
+      <label className="language-picker login-language-picker">
+        <span>{t('Langue', language)}</span>
+        <select
+          aria-label={t('Langue', language)}
+          value={language}
+          onChange={(event) => setSettings({ ...settings, language: event.target.value })}
+        >
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+          <option value="ar">العربية</option>
+        </select>
+      </label>
       <div className="login-shell">
         <div className="login-hero">
           <div className="login-hero-panel">
@@ -20,22 +34,21 @@ export function LoginPage() {
               <div className="brand-mark">T</div>
               <div>
                 <div className="brand-name">TuniSec</div>
-                <small>Audit de conformité</small>
+                <small>{t('Audit de conformité', language)}</small>
               </div>
             </div>
 
-            <span className="login-badge">Pour les PME tunisiennes</span>
+            <span className="login-badge">{t('Pour les PME tunisiennes', language)}</span>
 
             <h1>TuniSec</h1>
             <p className="login-subtitle">
-              Simplifiez votre audit de conformité à la protection des données personnelles avec un parcours
-              guidé, pensé pour les entreprises sans équipe juridique dédiée.
+              {t('Simplifiez votre audit de conformité à la protection des données personnelles avec un parcours guidé, pensé pour les entreprises sans équipe juridique dédiée.', language)}
             </p>
 
             <div className="login-metrics">
               <div>
                 <strong>12+</strong>
-                <span>Contrôles</span>
+                <span>{t('Contrôles', language)}</span>
               </div>
               <div>
                 <strong>4</strong>
@@ -43,44 +56,40 @@ export function LoginPage() {
               </div>
               <div>
                 <strong>1</strong>
-                <span>Démo</span>
+                <span>{t('Démo', language)}</span>
               </div>
             </div>
 
             <ul className="feature-list">
-              <li>Cartographie des traitements</li>
-              <li>Checklist juridique structurée</li>
-              <li>Constatations, risques et actions correctives</li>
-              <li>Rapport d’audit printable</li>
+              <li>{t('Cartographie des traitements', language)}</li>
+              <li>{t('Checklist juridique structurée', language)}</li>
+              <li>{t('Constatations, risques et actions correctives', language)}</li>
+              <li>{t('Rapport d’audit printable', language)}</li>
             </ul>
           </div>
         </div>
 
         <div className="login-card">
           <div className="login-card-header">
-            <span className="eyebrow">Accès</span>
-            <h2>Bienvenue</h2>
+            <span className="eyebrow">{t('Accès', language)}</span>
+            <h2>{t('Bienvenue', language)}</h2>
           </div>
 
           <p>
-            TuniSec aide les PME tunisiennes à structurer leur analyse de conformité, à prioriser leurs
-            actions et à préparer un audit simple, exploitable et compréhensible par l’ensemble de
-            l’entreprise. Ce démonstrateur ne remplace ni un avis juridique ni une conformité réglementaire
-            formelle.
+            {t('TuniSec aide les PME tunisiennes à structurer leur analyse de conformité, à prioriser leurs actions et à préparer un audit simple, exploitable et compréhensible par l’ensemble de l’entreprise. Ce démonstrateur ne remplace ni un avis juridique ni une conformité réglementaire formelle.', language)}
           </p>
 
           <div className="login-note">
-            <strong>Mode démonstration</strong>
-            <span>Un parcours guidé pour tester les étapes clés sans utiliser de données réelles.</span>
+            <strong>{t('Mode démonstration', language)}</strong>
+            <span>{t('Un parcours guidé pour tester les étapes clés sans utiliser de données réelles.', language)}</span>
           </div>
 
           <button className="button button-primary login-button" onClick={handleDemoAccess}>
-            Entrer dans la démo
+            {t('Entrer dans la démo', language)}
           </button>
 
           <p className="muted-text">
-            Attention : cette application ne garantit ni sécurité serveur ni confidentialité. N’utilisez pas
-            de données personnelles réelles.
+            {t('Attention : cette application ne garantit ni sécurité serveur ni confidentialité. N’utilisez pas de données personnelles réelles.', language)}
           </p>
         </div>
       </div>

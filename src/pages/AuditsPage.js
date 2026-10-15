@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useAudit } from '../context/AuditContext';
 import { calculateAuditProgress } from '../services/auditService';
 import { StatusBadge } from '../components/shared/ui';
+import { getDateLocale, translate as t } from '../i18n';
 
 export function AuditsPage() {
-  const { audits, deleteAudit } = useAudit();
+  const { audits, deleteAudit, settings } = useAudit();
+  const language = settings?.language || 'fr';
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('Tous');
   const [sortBy, setSortBy] = useState('startDate');
@@ -28,7 +30,7 @@ export function AuditsPage() {
     });
 
   const handleDelete = (auditId) => {
-    if (window.confirm('Voulez-vous vraiment supprimer cet audit et ses données associées ?')) {
+    if (window.confirm(t('Voulez-vous vraiment supprimer cet audit et ses données associées ?', language))) {
       deleteAudit(auditId);
     }
   };
@@ -37,11 +39,11 @@ export function AuditsPage() {
     <div className="page-header">
       <div className="page-toolbar">
         <div>
-          <span className="eyebrow">Gestion des projets</span>
-          <h1>Audits</h1>
+          <span className="eyebrow">{t('Gestion des projets', language)}</span>
+          <h1>{t('Audits', language)}</h1>
         </div>
         <button className="button button-primary" onClick={() => (window.location.href = '/audits/new')}>
-          Ajouter un audit
+          {t('Ajouter un audit', language)}
         </button>
       </div>
 
@@ -49,19 +51,17 @@ export function AuditsPage() {
         <input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Rechercher une organisation ou un audit"
+          placeholder={t('Rechercher une organisation ou un audit', language)}
         />
         <select value={status} onChange={(event) => setStatus(event.target.value)}>
-          <option value="Tous">Tous</option>
-          <option value="Planifié">Planifié</option>
-          <option value="En cours">En cours</option>
-          <option value="Terminé">Terminé</option>
-          <option value="À revoir">À revoir</option>
+          {['Tous', 'Planifié', 'En cours', 'Terminé', 'À revoir'].map((value) => (
+            <option key={value} value={value}>{t(value, language)}</option>
+          ))}
         </select>
         <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
-          <option value="startDate">Date de début</option>
-          <option value="title">Titre</option>
-          <option value="status">Statut</option>
+          <option value="startDate">{t('Date de début', language)}</option>
+          <option value="title">{t('Titre', language)}</option>
+          <option value="status">{t('Statut', language)}</option>
         </select>
       </div>
 
@@ -81,14 +81,14 @@ export function AuditsPage() {
               <div className="meta-grid">
                 <span>{audit.sector}</span>
                 <span>{audit.lead}</span>
-                <span>{new Date(audit.startDate).toLocaleDateString('fr-FR')}</span>
+                <span>{new Date(audit.startDate).toLocaleDateString(getDateLocale(language))}</span>
               </div>
 
               <p>{audit.scope}</p>
 
               <div className="progress-row compact">
                 <div className="progress-labels">
-                  <span>Progression</span>
+                  <span>{t('Progression', language)}</span>
                   <strong>{progress.percent}%</strong>
                 </div>
                 <div className="progress-track">
@@ -98,13 +98,13 @@ export function AuditsPage() {
 
               <div className="card-actions">
                 <button className="button button-secondary" onClick={() => (window.location.href = `/audits/${audit.id}`)}>
-                  Ouvrir
+                  {t('Ouvrir', language)}
                 </button>
                 <button className="button button-secondary" onClick={() => (window.location.href = `/audits/new?edit=${audit.id}`)}>
-                  Modifier
+                  {t('Modifier', language)}
                 </button>
                 <button className="button button-danger" onClick={() => handleDelete(audit.id)}>
-                  Supprimer
+                  {t('Supprimer', language)}
                 </button>
               </div>
             </div>

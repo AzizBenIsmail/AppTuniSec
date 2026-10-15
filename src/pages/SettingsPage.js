@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useAudit } from '../context/AuditContext';
 import { exportJsonFile, validateImportedData } from '../services/storageService';
 import { Field, SectionCard } from '../components/shared/ui';
+import { translate as t } from '../i18n';
 
 export function SettingsPage() {
   const { settings, setSettings, audits, resetData, importData, startOnboarding } = useAudit();
+  const language = settings?.language || 'fr';
   const [profile, setProfile] = useState(settings?.profile || { name: '', role: '', organization: '' });
   const [importMessage, setImportMessage] = useState('');
 
@@ -31,17 +33,17 @@ export function SettingsPage() {
         return;
       }
 
-      if (window.confirm('Remplacer les données existantes par le fichier importé ?')) {
+      if (window.confirm(t('Remplacer les données existantes par le fichier importé ?', language))) {
         importData(parsed);
-        setImportMessage('Import réussi. Les données ont été mises à jour.');
+        setImportMessage(t('Import réussi. Les données ont été mises à jour.', language));
       }
     } catch (error) {
-      setImportMessage('Le fichier importé n’est pas un JSON valide.');
+      setImportMessage(t('Le fichier importé n’est pas un JSON valide.', language));
     }
   };
 
   const handleReset = () => {
-    if (window.confirm('Réinitialiser les données de démonstration ?')) {
+    if (window.confirm(t('Réinitialiser les données de démonstration ?', language))) {
       resetData();
     }
   };
@@ -49,37 +51,44 @@ export function SettingsPage() {
   return (
     <div className="page-header">
       <div>
-        <span className="eyebrow">Paramètres</span>
-        <h1>Configuration</h1>
+        <span className="eyebrow">{t('Paramètres', language)}</span>
+        <h1>{t('Configuration', language)}</h1>
       </div>
 
       <div className="two-column-layout">
-        <SectionCard title="Profil de démonstration" className="panel-surface">
+        <SectionCard title={t('Profil de démonstration', language)} className="panel-surface">
           <div className="form-grid">
-            <Field label="Nom"><input value={profile.name} onChange={(event) => setProfile({ ...profile, name: event.target.value })} /></Field>
-            <Field label="Rôle"><input value={profile.role} onChange={(event) => setProfile({ ...profile, role: event.target.value })} /></Field>
-            <Field label="Organisation"><input value={profile.organization} onChange={(event) => setProfile({ ...profile, organization: event.target.value })} /></Field>
-            <Field label="Thème">
+            <Field label={t('Nom', language)}><input value={profile.name} onChange={(event) => setProfile({ ...profile, name: event.target.value })} /></Field>
+            <Field label={t('Rôle', language)}><input value={profile.role} onChange={(event) => setProfile({ ...profile, role: event.target.value })} /></Field>
+            <Field label={t('Organisation', language)}><input value={profile.organization} onChange={(event) => setProfile({ ...profile, organization: event.target.value })} /></Field>
+            <Field label={t('Thème', language)}>
               <select value={settings?.theme || 'dark'} onChange={(event) => setSettings({ ...settings, theme: event.target.value })}>
-                <option value="dark">Sombre</option>
-                <option value="light">Clair</option>
+                <option value="dark">{t('Sombre', language)}</option>
+                <option value="light">{t('Clair', language)}</option>
+              </select>
+            </Field>
+            <Field label={t('Langue', language)}>
+              <select value={language} onChange={(event) => setSettings({ ...settings, language: event.target.value })}>
+                <option value="fr">Français</option>
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
               </select>
             </Field>
           </div>
-          <button className="button button-primary" onClick={() => setSettings({ ...settings, profile })}>Enregistrer</button>
-          <button className="button button-secondary" onClick={startOnboarding}>Relancer le guide</button>
+          <button className="button button-primary" onClick={() => setSettings({ ...settings, profile })}>{t('Enregistrer', language)}</button>
+          <button className="button button-secondary" onClick={startOnboarding}>{t('Relancer le guide', language)}</button>
         </SectionCard>
 
-        <SectionCard title="Données et sécurité" className="panel-surface">
+        <SectionCard title={t('Données et sécurité', language)} className="panel-surface">
           <div className="stacked-form">
-            <button className="button button-secondary" onClick={handleExport}>Exporter les données</button>
+            <button className="button button-secondary" onClick={handleExport}>{t('Exporter les données', language)}</button>
             <label className="button button-secondary upload-button">
-              Importer JSON
+              {t('Importer JSON', language)}
               <input type="file" accept=".json" onChange={handleImport} />
             </label>
-            <button className="button button-danger" onClick={handleReset}>Réinitialiser la démo</button>
+            <button className="button button-danger" onClick={handleReset}>{t('Réinitialiser la démo', language)}</button>
             <p className="muted-text">
-              Les données locales sont stockées dans le navigateur. Elles ne constituent pas une sauvegarde sécurisée ni un stockage centralisé.
+              {t('Les données locales sont stockées dans le navigateur. Elles ne constituent pas une sauvegarde sécurisée ni un stockage centralisé.', language)}
             </p>
             {importMessage && <p className="status-note">{importMessage}</p>}
           </div>

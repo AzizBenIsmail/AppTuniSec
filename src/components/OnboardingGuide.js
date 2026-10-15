@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAudit } from '../context/AuditContext';
+import { translate as t } from '../i18n';
 
 const steps = [
   {
@@ -94,6 +95,7 @@ const steps = [
 
 export function OnboardingGuide() {
   const { settings, setSettings } = useAudit();
+  const language = settings?.language || 'fr';
   const [currentStep, setCurrentStep] = useState(settings?.onboardingStep || 0);
 
   useEffect(() => {
@@ -149,14 +151,14 @@ export function OnboardingGuide() {
   };
 
   return (
-    <div className="onboarding-backdrop" role="dialog" aria-modal="true" aria-label="Guide d’introduction TuniSec">
+    <div className="onboarding-backdrop" role="dialog" aria-modal="true" aria-label={`${t('Guide d’introduction', language)} TuniSec`}>
       <div className="onboarding-panel">
         <div className="onboarding-header">
           <div>
-            <span className="eyebrow">Guide d’introduction</span>
-            <h2>{step.title}</h2>
+            <span className="eyebrow">{t('Guide d’introduction', language)}</span>
+            <h2>{t(step.title, language)}</h2>
           </div>
-          <button type="button" className="button button-secondary onboarding-close" onClick={handleSkip} aria-label="Fermer le guide">
+          <button type="button" className="button button-secondary onboarding-close" onClick={handleSkip} aria-label={t('Fermer le guide', language)}>
             ✕
           </button>
         </div>
@@ -167,25 +169,25 @@ export function OnboardingGuide() {
           ))}
         </div>
 
-        <p className="onboarding-text">{step.description}</p>
+        <p className="onboarding-text">{t(step.description, language)}</p>
 
-        <div className="onboarding-highlight">{step.highlight}</div>
+        <div className="onboarding-highlight">{t(step.highlight, language)}</div>
 
         <ul className="onboarding-list">
           {step.points.map((point) => (
-            <li key={point}>{point}</li>
+            <li key={point}>{t(point, language)}</li>
           ))}
         </ul>
 
         <div className="onboarding-actions">
           <button type="button" className="button button-secondary" onClick={handlePrevious} disabled={currentStep === 0}>
-            Précédent
+            {t('Précédent', language)}
           </button>
           <button type="button" className="button button-secondary" onClick={handleSkip}>
-            Passer
+            {t('Passer', language)}
           </button>
           <button type="button" className="button button-primary" onClick={handleNext}>
-            {currentStep === steps.length - 1 ? 'Terminer' : 'Suivant'}
+            {t(currentStep === steps.length - 1 ? 'Terminer' : 'Suivant', language)}
           </button>
         </div>
       </div>

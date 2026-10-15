@@ -130,6 +130,35 @@ button {
   gap: 10px;
 }
 
+.language-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+
+.language-picker select {
+  min-width: 128px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 10px;
+  color: var(--text);
+  background: var(--input-bg);
+}
+
+.login-language-picker {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  z-index: 2;
+}
+
+.login-page {
+  position: relative;
+}
+
 .nav-link {
   text-decoration: none;
   color: var(--text-soft);
@@ -1045,4 +1074,32 @@ h2 {
   .guide-grid {
     grid-template-columns: 1fr;
   }
+
+  .login-language-picker {
+    top: 10px;
+    right: 12px;
+  }
+}
+
+html[dir='rtl'] .field,
+html[dir='rtl'] .detail-grid,
+html[dir='rtl'] .checklist-line,
+html[dir='rtl'] .onboarding-panel {
+  text-align: right;
+}
+
+html[dir='rtl'] .simple-list,
+html[dir='rtl'] .onboarding-list {
+  padding-right: 20px;
+  padding-left: 0;
+}
+
+html[dir='rtl'] .feature-list li {
+  padding-right: 26px;
+  padding-left: 0;
+}
+
+html[dir='rtl'] .feature-list li::before {
+  right: 0;
+  left: auto;
 }
